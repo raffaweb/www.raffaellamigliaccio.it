@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# see http://veithen.github.io/2014/11/16/sigterm-propagation.html
+
+trap 'kill -TERM $PID' TERM INT
+
+python -m SimpleHTTPServer & PID=$!
+python -m webbrowser -t "http://127.0.0.1:8000/"
+
+wait $PID
+trap - TERM INT
+wait $PID
+
+exit $?
